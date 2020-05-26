@@ -79,7 +79,7 @@ def smash(img, src):
 
 
 def main():
-    img_path = "../img/dummy.png"
+    img_path = "../img/bigger.png"
 
     img = cv2.imread(img_path)
     img_src = cv2.imread(img_path)
