@@ -7,6 +7,7 @@ you might want to look into b-splines
 my recommendation/idea is to look into template matching and markers
 I would recommend to put markers in the corners of the sticker so you can transform it
 
+https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 https://docs.opencv.org/master/db/da9/tutorial_aruco_board_detection.html
 
 @author: Michael Wagner

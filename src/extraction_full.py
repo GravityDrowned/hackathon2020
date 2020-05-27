@@ -251,7 +251,10 @@ def main_video_feed():
         cv2.imshow('main video feed', frame_small_text)
         if cv2.waitKey(1) == ord('q'):
             break
+
+    cv2.destroyAllWindows()
     cap.release()
+
 
 
 if __name__ == "__main__":
