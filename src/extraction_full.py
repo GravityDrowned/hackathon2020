@@ -9,7 +9,8 @@ It needs a lot of love in order to be amazing
 import cv2
 import numpy as np
 import os
-#import analysis_hackaton2.py
+# import analysis_hackaton2
+from analysis_hackaton2 import *
 
 
 def get_qr_code_coords(img):
@@ -123,11 +124,9 @@ def extract(img_path):
     crop_img = img_src[y_min:y_max, x_min:x_max]
     cv2.imshow('image', crop_img)
 
-    cv2.imwrite(os.path.join("./3.png"), crop_img);
+    # cv2.imwrite(os.path.join("./3.png"), crop_img);
 
-    cv2.waitKey(0)
-
-    cv2.destroyAllWindows()
+    return crop_img
 
 
 def main():
@@ -135,11 +134,17 @@ def main():
         for f in files:
             print(os.path.join(root, f))
             try:
-                extract(os.path.join(root, f))
+                crop_img = extract(os.path.join(root, f))
+                resize_img = cv2.resize(crop_img, (500, 90))
+                analysis(resize_img)
+                cv2.waitKey(0)
             except:
                 print("failed")
     # extract("../img/tee.png")
     # extract("../img/dummy.png")
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

@@ -68,7 +68,7 @@ def main():
     print(M)
     warped = cv2.warpPerspective(img_color, M, (img_color.shape[0], img_color.shape[1]))
     cv2.imshow('image', warped)
-    cv2.resizeWindow('image', 1000, 1000)
+    #cv2.resizeWindow('image', 1000, 1000)
     cv2.waitKey(0)
 
     cv2.destroyAllWindows()
