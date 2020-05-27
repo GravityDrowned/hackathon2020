@@ -2,7 +2,7 @@
 """
 Created on Tue May 26 16:45:38 2020
 
-@author: z003vjxs
+@author: z003vjxs (Anja)
 """
 from imutils import contours
 from skimage import measure
