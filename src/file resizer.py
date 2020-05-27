@@ -20,7 +20,7 @@ def main():
             print(os.path.join(root, f))
             #try:
             img = size_down(os.path.join(root, f))
-            cv2.imwrite(os.path.join(root, f), img);
+            cv2.imwrite(os.path.join(root, f), img)
 
             #except:
                 #print("failed")

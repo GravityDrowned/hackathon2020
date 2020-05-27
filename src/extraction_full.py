@@ -9,6 +9,7 @@ It needs a lot of love in order to be amazing
 import cv2
 import numpy as np
 import os
+#import analysis_hackaton2.py
 
 
 def get_qr_code_coords(img):
@@ -121,6 +122,9 @@ def extract(img_path):
 
     crop_img = img_src[y_min:y_max, x_min:x_max]
     cv2.imshow('image', crop_img)
+
+    cv2.imwrite(os.path.join("./3.png"), crop_img);
+
     cv2.waitKey(0)
 
     cv2.destroyAllWindows()
