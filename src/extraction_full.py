@@ -28,7 +28,9 @@ def get_qr_code_coords(img):
             cv2.circle(img, (coord[0][0], coord[0][1]), 5, (0, 255, 0), -1)
             coords.append((coord[0][0], coord[0][1]))
 
-    cv2.imshow('image', img)
+    frame_small = cv2.resize(img, (960, 540))
+    cv2.imshow('get qr code coordinates', frame_small)
+    #cv2.imshow('main video feed', frame_small)
     # cv2.resizeWindow('image', 1000, 1000)
     # cv2.waitKey(0)
 
@@ -64,7 +66,8 @@ def polyPD(img, min_size):
                 # for i in range(0, 3):
                 # cv2.circle(img, (cnt[i][0][0], cnt[i][0][1]), 5, (255, 0, 2), -1)
 
-    cv2.imshow('img', img)
+    frame_small = cv2.resize(img, (960, 540))
+    cv2.imshow('polyPD()', frame_small)
     # cv2.waitKey(0)
 
 
@@ -99,7 +102,8 @@ def get_corners_of_rect(img, qr_lower_left_point, qr_height, qr_width):
     cv2.circle(img, (x_max, y_min), 5, (255, 0, 2), -1)
     cv2.circle(img, (x_max, y_max), 5, (255, 0, 2), -1)
 
-    cv2.imshow('img', img)
+    frame_small = cv2.resize(img, (960, 540))
+    cv2.imshow('get_corners_of_rect', frame_small) # too big
     # cv2.waitKey(0)
 
     return y_min, y_max, x_min, x_max
@@ -128,7 +132,7 @@ def extract(img, img_src):
         if x_min != img_src.shape[1]:
 
             crop_img = img_src[y_min:y_max, x_min:x_max]
-            cv2.imshow('image', crop_img)
+            #cv2.imshow('image extract', crop_img)
             succesful = True
         else:
             succesful = False
@@ -139,11 +143,11 @@ def ez_analysis(img):
     print("test", img.shape[1])
     clean_img = img.copy()
 
-    for x in range(35, img.shape[1], 49):
+    for x in range(35, img.shape[1], 48):
         print(x)
         #for y in range (0, img.shape[0]):
         cv2.circle(img, (x, int(img.shape[0]/2)), 5, (0, 0, 255), -1)
-        cv2.imshow("ez_analysis", img)
+        cv2.imshow("ez_analysis()", img)
         #cv2.waitKey(0)
         x += 50
     #collect values
@@ -186,9 +190,11 @@ def main():
 
 
 def main_video_feed():
-    cap = cv2.VideoCapture('../img/vid/4.MOV')
-    #cap = cv2.VideoCapture('../img/vid/hot.mov')
+    #cap = cv2.VideoCapture('../img/vid/4.MOV')
+    cap = cv2.VideoCapture('../img/vid/hot.mov')
     frameskip = 0
+    temperature = 40
+
     while cap.isOpened():
         ret, frame = cap.read()
         # if frame is read correctly ret is True
@@ -196,7 +202,7 @@ def main_video_feed():
             print("Can't receive frame (stream end?). Exiting ...")
             break
         frameskip+=1
-        if(frameskip > 20):
+        if(frameskip > 600):
             frameskip = 0
             img = frame.copy() #cv2.resize(frame, (int(frame.shape[0]/4), int(frame.shape[1]/4)))
             img_src = img.copy()
@@ -208,6 +214,7 @@ def main_video_feed():
                 hot_marker = ez_analysis(resize_img)
 
                 print("TEMP:", hot_marker*4+40)
+                temperature = hot_marker*4+40
 
                 #analysis(resize_img)
                 #cv2.waitKey(0)
@@ -216,8 +223,10 @@ def main_video_feed():
 
 
 
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('frame', gray)
+        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        frame_small = cv2.resize(frame, (960, 540))
+        frame_small_text = cv2.putText(frame_small, str(temperature)+'C', (50, 250) , cv2.FONT_HERSHEY_SIMPLEX, 10, (100, 150, 0) , 20, cv2.LINE_AA)
+        cv2.imshow('main video feed', frame_small_text)
         if cv2.waitKey(1) == ord('q'):
             break
     cap.release()
