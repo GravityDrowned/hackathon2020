@@ -59,7 +59,7 @@ def analysis(image):
     print('Temperatur: {}'.format(temprature))
     cv2.imshow('close', close)
     cv2.imshow('original', roi)
-    cv2.waitKey(0)
+    #cv2.waitKey(0)
 
 
 def main():

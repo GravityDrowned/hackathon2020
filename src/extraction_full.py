@@ -107,22 +107,58 @@ def get_corners_of_rect(img, qr_lower_left_point, qr_height, qr_width):
 
 def extract(img, img_src):
 
-
+    succesful = False
+    crop_img = None
     # get the qr coordinates
-    qr_lower_left_point, qr_height, qr_width = get_qr_code_coords(img)
+    try:
+        qr_lower_left_point, qr_height, qr_width = get_qr_code_coords(img)
+        succesful = True
+    except:
+        print("extract of points failed")
 
-    # img = cv2.imread(img_path)
-    # img_src = cv2.imread(img_path)
-    min_size = qr_width
-    polyPD(img, min_size)
-    blur = cv2.GaussianBlur(img, (5, 5), 0)
-    y_min, y_max, x_min, x_max = get_corners_of_rect(blur, qr_lower_left_point, qr_height, qr_width)
+    if succesful:
+        # img = cv2.imread(img_path)
+        # img_src = cv2.imread(img_path)
+        min_size = qr_width
+        polyPD(img, min_size)
+        blur = cv2.GaussianBlur(img, (5, 5), 0)
+        y_min, y_max, x_min, x_max = get_corners_of_rect(blur, qr_lower_left_point, qr_height, qr_width)
 
-    crop_img = img_src[y_min:y_max, x_min:x_max]
-    cv2.imshow('image', crop_img)
+        print(x_min, y_min, img_src.shape)
+        if x_min != img_src.shape[1]:
 
-    return crop_img
+            crop_img = img_src[y_min:y_max, x_min:x_max]
+            cv2.imshow('image', crop_img)
+            succesful = True
+        else:
+            succesful = False
 
+    return crop_img, succesful
+
+def ez_analysis(img):
+    print("test", img.shape[1])
+    clean_img = img.copy()
+
+    for x in range(35, img.shape[1], 49):
+        print(x)
+        #for y in range (0, img.shape[0]):
+        cv2.circle(img, (x, int(img.shape[0]/2)), 5, (0, 0, 255), -1)
+        cv2.imshow("ez_analysis", img)
+        #cv2.waitKey(0)
+        x += 50
+    #collect values
+    datapoints = []
+    hot_marker = 0
+    for x in range(35, img.shape[1], 49):
+        temp = clean_img[int(img.shape[0]/2), x]
+        datapoints.append(temp)
+        # ToDo: normalise your image in order to get a good value
+        if temp[2] > 50:
+            hot_marker+=1
+
+
+    print("hotmarkers", hot_marker, "datapoints", datapoints)
+    return hot_marker
 
 def main():
     for root, dirs, files in os.walk("../img/all", topdown=False):
@@ -132,40 +168,61 @@ def main():
                 img_path = os.path.join(root, f)
                 img = cv2.imread(img_path)
                 img_src = cv2.imread(img_path)  # , cv2.IMREAD_COLOR)
-                crop_img = extract(img, img_src)
-                resize_img = cv2.resize(crop_img, (500, 90))
-                cv2.imwrite(os.path.join("./7.png"), resize_img);
-
-                #analysis(resize_img)
-                cv2.waitKey(0)
+                crop_img, succesful = extract(img, img_src)
+                if succesful:
+                    resize_img = cv2.resize(crop_img, (500, 90))
+                    # cv2.imwrite(os.path.join("./7.png"), resize_img);
+                    analysis(resize_img)
+                    #cv2.waitKey(0)
+                else:
+                    print("extraction failed")
             except:
                 print("failed")
     # extract("../img/tee.png")
     # extract("../img/dummy.png")
 
-    cv2.waitKey(0)
+    #cv2.waitKey(0)
     cv2.destroyAllWindows()
-""""
+
+
 def main_video_feed():
-    cap = cv2.VideoCapture('../img/vid/1.MOV')
+    cap = cv2.VideoCapture('../img/vid/4.MOV')
+    #cap = cv2.VideoCapture('../img/vid/hot.mov')
+    frameskip = 0
     while cap.isOpened():
         ret, frame = cap.read()
         # if frame is read correctly ret is True
         if not ret:
             print("Can't receive frame (stream end?). Exiting ...")
             break
+        frameskip+=1
+        if(frameskip > 20):
+            frameskip = 0
+            img = frame.copy() #cv2.resize(frame, (int(frame.shape[0]/4), int(frame.shape[1]/4)))
+            img_src = img.copy()
+            crop_img, succesful = extract(img, img_src)
 
-        crop_img = extract()
-        resize_img = cv2.resize(crop_img, (500, 90))
-        analysis(resize_img)
-        cv2.waitKey(0)
+            if succesful:
+                resize_img = cv2.resize(crop_img, (500, 90))
+                # cv2.imwrite(os.path.join("./7.png"), resize_img);
+                hot_marker = ez_analysis(resize_img)
 
-        gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-        cv.imshow('frame', gray)
-        if cv.waitKey(1) == ord('q'):
+                print("TEMP:", hot_marker*4+40)
+
+                #analysis(resize_img)
+                #cv2.waitKey(0)
+            else:
+                print("extraction failed")
+
+
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        cv2.imshow('frame', gray)
+        if cv2.waitKey(1) == ord('q'):
             break
     cap.release()
-"""
+
 
 if __name__ == "__main__":
-    main()
+    # main()
+    main_video_feed()
