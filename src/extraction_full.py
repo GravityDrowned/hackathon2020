@@ -30,9 +30,7 @@ def get_qr_code_coords(img):
 
     frame_small = cv2.resize(img, (960, 540))
     cv2.imshow('get qr code coordinates', frame_small)
-    #cv2.imshow('main video feed', frame_small)
-    # cv2.resizeWindow('image', 1000, 1000)
-    # cv2.waitKey(0)
+
 
     print(coords)
 
