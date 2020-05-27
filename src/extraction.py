@@ -2,10 +2,10 @@
 An OpenCV extraction tool to get good images to feed into the temp analysis tool (extraction_full.py)
 proof of concept of how you can transform images for further handling
 
-generally speaking affine transformations aren't enough for photos (perfect solution)
+generally speaking affine transformations aren't enough for photos (parallel lines), but might be good enough for this problem
 you might want to look into b-splines
 my recommendation/idea is to look into template matching and markers
-I would recommend to put markers in the corners of the sticker so you can transform it
+I would recommend to put markers in the corners of the sticker so you can transform the image
 
 https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
 https://docs.opencv.org/master/db/da9/tutorial_aruco_board_detection.html
