@@ -105,11 +105,8 @@ def get_corners_of_rect(img, qr_lower_left_point, qr_height, qr_width):
     return y_min, y_max, x_min, x_max
 
 
-def extract(img_path):
-    # read the img
-    img = cv2.imread(img_path)
-    # img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    img_src = cv2.imread(img_path)  # , cv2.IMREAD_COLOR)
+def extract(img, img_src):
+
 
     # get the qr coordinates
     qr_lower_left_point, qr_height, qr_width = get_qr_code_coords(img)
@@ -124,8 +121,6 @@ def extract(img_path):
     crop_img = img_src[y_min:y_max, x_min:x_max]
     cv2.imshow('image', crop_img)
 
-    # cv2.imwrite(os.path.join("./3.png"), crop_img);
-
     return crop_img
 
 
@@ -134,9 +129,14 @@ def main():
         for f in files:
             print(os.path.join(root, f))
             try:
-                crop_img = extract(os.path.join(root, f))
+                img_path = os.path.join(root, f)
+                img = cv2.imread(img_path)
+                img_src = cv2.imread(img_path)  # , cv2.IMREAD_COLOR)
+                crop_img = extract(img, img_src)
                 resize_img = cv2.resize(crop_img, (500, 90))
-                analysis(resize_img)
+                cv2.imwrite(os.path.join("./7.png"), resize_img);
+
+                #analysis(resize_img)
                 cv2.waitKey(0)
             except:
                 print("failed")
@@ -145,7 +145,27 @@ def main():
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+""""
+def main_video_feed():
+    cap = cv2.VideoCapture('../img/vid/1.MOV')
+    while cap.isOpened():
+        ret, frame = cap.read()
+        # if frame is read correctly ret is True
+        if not ret:
+            print("Can't receive frame (stream end?). Exiting ...")
+            break
 
+        crop_img = extract()
+        resize_img = cv2.resize(crop_img, (500, 90))
+        analysis(resize_img)
+        cv2.waitKey(0)
+
+        gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+        cv.imshow('frame', gray)
+        if cv.waitKey(1) == ord('q'):
+            break
+    cap.release()
+"""
 
 if __name__ == "__main__":
     main()
