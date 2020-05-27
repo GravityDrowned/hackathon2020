@@ -211,7 +211,13 @@ def main_video_feed():
     :return: -
     """
     #cap = cv2.VideoCapture('../img/vid/1.Mov') #1,2,3,4
+    print("If you get an CAP_IMAGES ERROR: You might want to change the .mov file (line 216) "
+          "or download the demo hot.mov (contact michael.wagner.bamberg@gmail.com) \n"
+          "or download IMG_2489.mov from https://www.fagservice.de/apps/files/?dir=/Temperatur%20Sticker%20Videoaufnahme&fileid=2359368"
+          "see README for who to contact for login credentials")
+
     cap = cv2.VideoCapture('../img/vid/hot.mov')
+
     number_frames_to_skip = 600
     frameskip = 0
     temperature = 40
