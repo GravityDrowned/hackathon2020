@@ -17,12 +17,11 @@ import cv2
 import numpy as np
 
 
-def main():
+def main(img_path):
     """
     opens a test image, gets the qr code corners and applies a perspective transformation
     :return:
     """
-    img_path = "../img/tee.png"
     # read the img
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
     img_color = cv2.imread(img_path, cv2.IMREAD_COLOR)
@@ -76,4 +75,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    img_path = "../img/tee.png"
+    main(img_path)

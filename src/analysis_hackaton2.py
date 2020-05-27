@@ -63,7 +63,7 @@ def analysis(image):
 
 
 def main():
-    #img = cv2.imread('C:/Users/z003vjxs/Desktop/hackaton/hackathon2020/img/dummy.png')
+    #img = cv2.imread('../img/dummy.png')
     img = cv2.imread('../img/3.png')
     analysis(img)
 
